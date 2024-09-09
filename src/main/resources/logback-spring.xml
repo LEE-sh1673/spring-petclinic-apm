@@ -1,0 +1,27 @@
+<configuration>
+
+	<appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight([%-5level]) %logger{36} - [TxId : %X{PtxId} , SpanId : %X{PspanId}] %msg%n</Pattern>
+		</encoder>
+	</appender>
+
+	<appender name="NHN_LOG_CRASH_APPENDER" class="org.springframework.samples.petclinic.LogCrashAppender">
+		<url>https://api-logncrash.cloud.toast.com/v2/log</url>
+	</appender>
+
+	<appender name="ASYNC_NHN_LOG_CRASH_APPENDER" class="ch.qos.logback.classic.AsyncAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight([%-5level]) %logger{36} - [TxId : %X{PtxId} , SpanId : %X{PspanId}] %msg%n</pattern>
+		</encoder>
+		<appender-ref ref="NHN_LOG_CRASH_APPENDER"/>
+	</appender>
+
+	<root level="INFO">
+		<appender-ref ref="Console" />
+		<appender-ref ref="ASYNC_NHN_LOG_CRASH_APPENDER" />
+	</root>
+</configuration>
